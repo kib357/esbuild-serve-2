@@ -1,0 +1,28 @@
+{
+  "name": "node-dev-server",
+  "version": "0.0.1",
+  "description": "Front-end application development server with API proxy and live reload",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "playwright test",
+    "start": "ts-node ./src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kib357/node-dev-server.git"
+  },
+  "author": "Evgeniy Kuvshinov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kib357/node-dev-server/issues"
+  },
+  "homepage": "https://github.com/kib357/node-dev-server#readme",
+  "dependencies": {
+    "ws": "^8.8.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.23.2",
+    "@types/node": "^18.0.3",
+    "ts-node": "^10.8.2"
+  }
+}
