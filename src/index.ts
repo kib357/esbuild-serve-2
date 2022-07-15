@@ -10,13 +10,14 @@ namespace DevServer {
   export type ProxyOptions = {
     filter: RegExp;
     host: string;
-    port: number;
     https?: boolean;
+    port: number;
   };
 
   export type ServerOptions = {
     dir: string;
     indexPath?: string;
+    port?: number;
     proxy?: ProxyOptions[];
     server?: http.Server;
     verbose?: boolean;
@@ -26,6 +27,7 @@ namespace DevServer {
 type InternalServerOptions = {
   dir: string;
   indexContent: string;
+  port: number;
   proxy: DevServer.ProxyOptions[];
   server?: http.Server;
   verbose: boolean;
@@ -70,14 +72,15 @@ class DevServer {
       throw new Error(`Index HTML file not found in "${indexPath}"`);
     }
     const proxy = options.proxy ?? [];
+    const port = options.port ?? 3000;
     const verbose = options.verbose ?? true;
 
-    return new DevServer({ ...options, indexContent, proxy, verbose });
+    return new DevServer({ ...options, indexContent, proxy, port, verbose });
   }
 
-  start(port = 3000) {
+  start() {
+    const { port } = this.options;
     this.server.listen(port);
-
     this.info(`Development server listening at http://localhost:${port}`);
   }
 
