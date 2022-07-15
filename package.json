@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kib357/node-dev-server.git"
+    "url": "git+https://github.com/kib357/spa-dev-server.git"
   },
   "author": "Evgeniy Kuvshinov",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kib357/node-dev-server/issues"
+    "url": "https://github.com/kib357/spa-dev-server/issues"
   },
-  "homepage": "https://github.com/kib357/node-dev-server#readme",
+  "homepage": "https://github.com/kib357/spa-dev-server#readme",
   "devDependencies": {
     "@playwright/test": "^1.23.2",
     "@types/node": "^18.0.3",
