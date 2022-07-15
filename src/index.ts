@@ -8,7 +8,7 @@ import LiveReloadServer from "./livereload/server";
 
 namespace DevServer {
   export type ProxyOptions = {
-    filter: RegExp;
+    filter: RegExp | { (req: http.IncomingMessage): boolean };
     host: string;
     https?: boolean;
     port: number;
@@ -49,7 +49,11 @@ class DevServer {
       if (pathname === "/livereload.js") return this.sendLiveReload(res);
 
       for (const p of options.proxy ?? []) {
-        if (p.filter.test(pathname)) return this.proxyReq(p, req, res);
+        const useProxy =
+          typeof p.filter === "function"
+            ? p.filter(req)
+            : p.filter.test(pathname);
+        if (useProxy) return this.proxyReq(p, req, res);
       }
 
       const ext = path.extname(pathname);

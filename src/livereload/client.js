@@ -1,6 +1,6 @@
 function connectLiveReload() {
   let open = false;
-  const wsConnection = new WebSocket(`ws//${location.host}/livereload`);
+  const wsConnection = new WebSocket(`ws://${location.host}/livereload`);
 
   wsConnection.addEventListener("close", () => {
     console.warn(
