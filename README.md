@@ -1,4 +1,4 @@
-# node-dev-server
+# spa-dev-server
 
 Front-end application development server with API proxy and live reload, suitable for ESBuild and other bundlers.
 
@@ -15,7 +15,7 @@ Front-end application development server with API proxy and live reload, suitabl
 ## Installation
 
 ```
-npm i node-dev-server
+npm i spa-dev-server
 ```
 
 ## Usage

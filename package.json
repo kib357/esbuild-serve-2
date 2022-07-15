@@ -1,7 +1,7 @@
 {
-  "name": "node-dev-server",
+  "name": "spa-dev-server",
   "version": "0.0.1",
-  "description": "Front-end application development server with API proxy and live reload",
+  "description": "Single page front-end application development server with API proxy and live reload",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
