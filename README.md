@@ -10,6 +10,7 @@ Front-end application development server with API proxy and live reload, suitabl
 - Serve index.html from main dir or given `indexPath`, supports HTML5 history API fallback.
 - Proxy API requests to prevent CORS errors.
 - Live reload opened tabs with `server.livereload.sendReload()`.
+- ESBuild plugin
 - Zero dependencies and small size. Server uses `http` module directly without large production HTTP libraries, like "express".
 
 ## Installation
@@ -22,9 +23,9 @@ npm i spa-dev-server
 
 ### Basic
 
-```
+```typescript
 const path = require('path')
-const DevSever = require('node-dev-server')
+const DevSever = require('spa-dev-server')
 
 DevServer.create({
   dir: path.resolve(__dirname, './dist'),
@@ -35,10 +36,10 @@ DevServer.create({
 
 ### Custom HTTP server
 
-```
+```typescript
 const http = require('http')
 const path = require('path')
-const DevSever = require('node-dev-server')
+const DevSever = require('spa-dev-server')
 
 const server = http.createServer()
 
@@ -52,20 +53,50 @@ server.listen(3000)
 
 ### Proxy API requests
 
-```
+```typescript
 const path = require('path')
-const DevSever = require('node-dev-server')
+const DevSever = require('spa-dev-server')
 
 DevServer.create({
   dir: path.resolve(__dirname, './dist'),
-  proxy: [{ filter: /^\/api/, host: "localhost", port: 4000 }],
+  proxy: [
+    { filter: /^\/api/, host: "localhost", port: 4000 },
+    {
+      filter: (req) => req.headers["content-type"] === "application/json",
+      host: "localhost",
+      port: 8080,
+    },
+  ],
 });
+```
+
+### ESBuild
+
+```typescript
+import path from "path";
+import DevServer from "spa-dev-server";
+import esbuild from "esbuild";
+
+const start = async () => {
+  const dir = path.resolve(__dirname, "./dist")
+  const server = await DevServer.create({ dir });
+
+  esbuild.build({
+    bundle: true,
+    entryPoints: ["./src/index.tsx"],
+    outdir: dir,
+    plugins: [server.getEsbuildPlugin()],
+    watch: true,
+  });
+};
+
+start();
 ```
 
 ## Options
 
 ### Server Options
-```
+```typescript
 type ServerOptions = {
   dir: string; // Build output directory to serve files from
   indexPath?: string; // Custom path to index HTML file
@@ -77,11 +108,11 @@ type ServerOptions = {
 ```
 
 ### Proxy Options
-```
+```typescript
 type ProxyOptions = {
-  filter: RegExp; // Requests pathname should match this filter
+  filter: RegExp | { (req: http.IncomingMessage): boolean }; // Requests should match this filter
   host: string; // Destination server host
-  port: number; // Destination server port
-  https?: boolean; // Use HTTPs. Default: false
+  https?: boolean; // Use https. Default: false
+  port?: number; // Destination server port
 };
 ```

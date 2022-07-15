@@ -11,7 +11,7 @@ namespace DevServer {
     filter: RegExp | { (req: http.IncomingMessage): boolean };
     host: string;
     https?: boolean;
-    port: number;
+    port?: number;
   };
 
   export type ServerOptions = {
@@ -31,6 +31,12 @@ type InternalServerOptions = {
   proxy: DevServer.ProxyOptions[];
   server?: http.Server;
   verbose: boolean;
+};
+
+type Callback = { (): void };
+type EsbuildPluginBuild = {
+  onEnd: (cb: Callback) => {};
+  onStart: (cb: Callback) => {};
 };
 
 class DevServer {
@@ -95,6 +101,18 @@ class DevServer {
         resolve();
       });
     });
+  }
+
+  getEsbuildPlugin() {
+    const setup = (build: EsbuildPluginBuild) => {
+      build.onEnd(() => {
+        this.livereload.sendReload();
+      });
+      build.onStart(() => {
+        this.livereload.sendRebuildStarted();
+      });
+    };
+    return { name: "dev-server", setup };
   }
 
   private sendLiveReload(res: http.ServerResponse) {
