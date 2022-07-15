@@ -1,6 +1,6 @@
 {
   "name": "spa-dev-server",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Single page front-end application development server with API proxy and live reload",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
