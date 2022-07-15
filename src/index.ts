@@ -6,34 +6,36 @@ import url from "url";
 import { getMimeType } from "./MimeTypes";
 import LiveReloadServer from "./livereload/server";
 
-type ProxyOptions = {
-  filter: RegExp;
-  host: string;
-  port: number;
-  https?: boolean;
-};
+namespace DevServer {
+  export type ProxyOptions = {
+    filter: RegExp;
+    host: string;
+    port: number;
+    https?: boolean;
+  };
 
-export type DevServerOptions = {
-  dir: string;
-  indexPath?: string;
-  proxy?: ProxyOptions[];
-  server?: http.Server;
-  verbose?: boolean;
-};
+  export type ServerOptions = {
+    dir: string;
+    indexPath?: string;
+    proxy?: ProxyOptions[];
+    server?: http.Server;
+    verbose?: boolean;
+  };
+}
 
-type DevServerPrivateOptions = {
+type InternalServerOptions = {
   dir: string;
   indexContent: string;
-  proxy: ProxyOptions[];
+  proxy: DevServer.ProxyOptions[];
   server?: http.Server;
   verbose: boolean;
 };
 
-export default class DevServer {
+class DevServer {
   server: http.Server;
   livereload: LiveReloadServer;
 
-  private constructor(private options: DevServerPrivateOptions) {
+  private constructor(private options: InternalServerOptions) {
     this.server = options.server || http.createServer();
     this.livereload = new LiveReloadServer(this.server);
 
@@ -59,7 +61,7 @@ export default class DevServer {
     }
   }
 
-  static async create(options: DevServerOptions) {
+  static async create(options: DevServer.ServerOptions) {
     const indexPath = options.indexPath || path.join(options.dir, "index.html");
     let indexContent: string;
     try {
@@ -94,7 +96,7 @@ export default class DevServer {
   }
 
   private proxyReq(
-    proxy: ProxyOptions,
+    proxy: DevServer.ProxyOptions,
     req: http.IncomingMessage,
     res: http.ServerResponse
   ) {
@@ -168,16 +170,8 @@ export default class DevServer {
   }
 }
 
+export = DevServer;
+
 async function readFile(filePath: string) {
   return fs.readFile(filePath, "utf-8");
 }
-
-// async function fileExists(filePath: string) {
-//   try {
-//     const stat = await fs.stat(filePath);
-//     if (!stat.isFile()) return false;
-//   } catch (error) {
-//     return false;
-//   }
-//   return true;
-// }

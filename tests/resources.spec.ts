@@ -2,13 +2,13 @@ import { test, expect } from "@playwright/test";
 import path from "path";
 import http from "http";
 import url from "url";
-import DevServer, { DevServerOptions } from "../src/index";
+import DevServer from "../dist/index";
 
 const contentDir = path.resolve(__dirname, "../content");
 
 let server: DevServer | undefined;
 const createServer = async (
-  options: DevServerOptions = { dir: contentDir }
+  options: DevServer.ServerOptions = { dir: contentDir }
 ) => {
   server = await DevServer.create({ verbose: false, ...options });
 };

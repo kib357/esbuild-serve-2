@@ -3,10 +3,11 @@
   "version": "0.0.1",
   "description": "Front-end application development server with API proxy and live reload",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "rm -rf ./dist/ && tsc",
     "start": "ts-node ./src/index.ts",
-    "test": "playwright test"
+    "test": "npm run build && playwright test"
   },
   "repository": {
     "type": "git",
@@ -18,9 +19,6 @@
     "url": "https://github.com/kib357/node-dev-server/issues"
   },
   "homepage": "https://github.com/kib357/node-dev-server#readme",
-  "dependencies": {
-    "ws": "^8.8.0"
-  },
   "devDependencies": {
     "@playwright/test": "^1.23.2",
     "@types/node": "^18.0.3",
