@@ -35,8 +35,8 @@ type InternalServerOptions = {
 
 type Callback = { (): void };
 type EsbuildPluginBuild = {
-  onEnd: (cb: Callback) => {};
-  onStart: (cb: Callback) => {};
+  onEnd: (cb: Callback) => void;
+  onStart: (cb: Callback) => void;
 };
 
 class DevServer {
