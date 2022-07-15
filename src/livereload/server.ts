@@ -27,10 +27,6 @@ export default class LiveReloadServer {
 
       this.addSocket(socket);
     });
-
-    setInterval(() => {
-      this.send("hello");
-    }, 5000);
   }
 
   sendRebuildStarted() {
