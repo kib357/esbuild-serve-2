@@ -4,8 +4,9 @@
   "description": "Front-end application development server with API proxy and live reload",
   "main": "dist/index.js",
   "scripts": {
-    "test": "playwright test",
-    "start": "ts-node ./src/index.ts"
+    "build": "rm -rf ./dist/ && tsc",
+    "start": "ts-node ./src/index.ts",
+    "test": "playwright test"
   },
   "repository": {
     "type": "git",

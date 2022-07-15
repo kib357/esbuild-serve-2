@@ -1,6 +1,7 @@
 {
   "include": ["src/**/*"],
   "compilerOptions": {  
+    "allowJs": true,
     "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
     "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
     "lib": ["ES2021"],                                   /* Specify a set of bundled library declaration files that describe the target runtime environment. */    

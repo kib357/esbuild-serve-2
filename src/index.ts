@@ -4,6 +4,7 @@ import https from "https";
 import path from "path";
 import url from "url";
 import { getMimeType } from "./MimeTypes";
+import LiveReloadServer from "./livereload/server";
 
 type ProxyOptions = {
   filter: RegExp;
@@ -30,9 +31,11 @@ type DevServerPrivateOptions = {
 
 export default class DevServer {
   server: http.Server;
+  livereload: LiveReloadServer;
 
   private constructor(private options: DevServerPrivateOptions) {
     this.server = options.server || http.createServer();
+    this.livereload = new LiveReloadServer(this.server);
 
     this.server.on("request", (req, res) => {
       this.info(`${req.method} ${req.url}`);
@@ -86,7 +89,7 @@ export default class DevServer {
   }
 
   private sendLiveReload(res: http.ServerResponse) {
-    const scriptPath = path.resolve(__dirname, "./livereload.js");
+    const scriptPath = path.resolve(__dirname, "./livereload/client.js");
     return this.sendFile(scriptPath, res);
   }
 
