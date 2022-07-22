@@ -7,10 +7,10 @@ import DevServer from "../dist/index";
 const contentDir = path.resolve(__dirname, "../content");
 
 let server: DevServer | undefined;
-const createServer = async (
+const createServer = (
   options: DevServer.ServerOptions = { dir: contentDir }
 ) => {
-  server = await DevServer.create({ verbose: false, ...options });
+  server = DevServer.create({ verbose: false, ...options });
 };
 
 test.beforeEach(() => {
@@ -22,7 +22,7 @@ test.afterEach(async () => {
 });
 
 test("returns index file from dir root", async ({ request }) => {
-  await createServer();
+  createServer();
   const indexReq = await request.get(`/`);
 
   expect(indexReq.ok()).toBeTruthy();
@@ -30,7 +30,7 @@ test("returns index file from dir root", async ({ request }) => {
 });
 
 test("returns index file given history API path", async ({ request }) => {
-  await createServer();
+  createServer();
   const indexReq = await request.get(`/a`);
 
   expect(indexReq.ok()).toBeTruthy();
@@ -38,7 +38,7 @@ test("returns index file given history API path", async ({ request }) => {
 });
 
 test("injects livereload script in index file", async ({ request }) => {
-  await createServer();
+  createServer();
   const indexReq = await request.get(`/`);
 
   expect(indexReq.ok()).toBeTruthy();
@@ -48,7 +48,7 @@ test("injects livereload script in index file", async ({ request }) => {
 });
 
 test("returns livereload script", async ({ request }) => {
-  await createServer();
+  createServer();
   const indexReq = await request.get(`/livereload.js`);
 
   expect(indexReq.ok()).toBeTruthy();
@@ -81,7 +81,7 @@ test("throws when index html not found in given path", async ({ request }) => {
 });
 
 test("returns static files", async ({ request }) => {
-  await createServer();
+  createServer();
   const indexReq = await request.get(`/index.js`);
 
   expect(indexReq.ok()).toBeTruthy();
@@ -93,7 +93,7 @@ test("returns static files", async ({ request }) => {
 });
 
 test("returns 404 when static file not found", async ({ request }) => {
-  await createServer();
+  createServer();
   const indexReq = await request.get(`/unknown.js`);
 
   expect(indexReq.status()).toBe(404);

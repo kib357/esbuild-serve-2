@@ -1,3 +1,4 @@
+import { readFileSync } from "fs";
 import fs from "fs/promises";
 import http from "http";
 import https from "https";
@@ -73,11 +74,11 @@ class DevServer {
     }
   }
 
-  static async create(options: DevServer.ServerOptions) {
+  static create(options: DevServer.ServerOptions) {
     const indexPath = options.indexPath || path.join(options.dir, "index.html");
     let indexContent: string;
     try {
-      indexContent = await readFile(indexPath);
+      indexContent = readFileSync(indexPath, "utf-8");
     } catch (error) {
       throw new Error(`Index HTML file not found in "${indexPath}"`);
     }
