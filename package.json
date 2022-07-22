@@ -23,5 +23,8 @@
     "@playwright/test": "^1.23.2",
     "@types/node": "^18.0.3",
     "ts-node": "^10.8.2"
+  },
+  "dependencies": {
+    "esbuild": "^0.14.49"
   }
 }

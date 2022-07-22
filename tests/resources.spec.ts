@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import path from "path";
 import http from "http";
 import url from "url";
-import DevServer from "../dist/index";
+import DevServer from "../dist/server";
 
 const contentDir = path.resolve(__dirname, "../content");
 
