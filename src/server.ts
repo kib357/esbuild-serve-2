@@ -143,7 +143,7 @@ class DevServer {
   }
 
   private async sendFile(filePath: string, res: http.ServerResponse) {
-    const content = await readFile(filePath);
+    const content = await fs.readFile(filePath);
     res.setHeader("content-type", getMimeType(filePath));
     res.end(content);
   }
@@ -179,7 +179,3 @@ class DevServer {
 }
 
 export = DevServer;
-
-async function readFile(filePath: string) {
-  return fs.readFile(filePath, "utf-8");
-}

@@ -27,8 +27,8 @@ npm i esbuild-serve-2
 ### Basic
 
 ```typescript
-const path = require('path')
-const serve = require('esbuild-serve-2')
+import path from 'path'
+import serve from 'esbuild-serve-2'
 
 serve({
     entryPoints: ["./src/index.tsx"],
@@ -42,9 +42,9 @@ serve({
 ### Custom HTTP server
 
 ```typescript
-const path = require('path')
-const http = require('http')
-const serve = require('esbuild-serve-2')
+import path from 'path'
+import http from 'http'
+import serve from 'esbuild-serve-2'
 
 const server = http.createServer()
 
@@ -61,8 +61,8 @@ server.listen(3000)
 ### Proxy API requests
 
 ```typescript
-const path = require('path')
-const serve = require('esbuild-serve-2')
+import path from 'path'
+import serve from 'esbuild-serve-2'
 
 serve({
     entryPoints: ["./src/index.tsx"],
