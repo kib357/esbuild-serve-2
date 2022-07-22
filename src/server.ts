@@ -34,6 +34,29 @@ type InternalServerOptions = {
   verbose: boolean;
 };
 
+type ProxyRequest = {
+  name: "PROXY";
+  proxy: DevServer.ProxyOptions;
+};
+
+type FileRequest = {
+  name: "FILE";
+};
+
+type IndexRequest = {
+  name: "HTML";
+};
+
+type LivereloadScriptRequest = {
+  name: "LIVERELOAD SCRIPT";
+};
+
+type RequestType =
+  | ProxyRequest
+  | FileRequest
+  | IndexRequest
+  | LivereloadScriptRequest;
+
 class DevServer {
   server: http.Server;
   livereload: LiveReloadServer;
@@ -43,29 +66,41 @@ class DevServer {
     this.livereload = new LiveReloadServer(this.server);
 
     this.server.on("request", (req, res) => {
-      this.info(`${req.method} ${req.url}`);
-
       const pathname = this.getPathname(req.url);
+      const requestType = this.getRequestType(req, pathname);
+      this.info(`${color(requestType)} ${req.method} ${req.url}`);
 
-      if (pathname === "/livereload.js") return this.sendLiveReload(res);
-
-      for (const p of options.proxy ?? []) {
-        const useProxy =
-          typeof p.filter === "function"
-            ? p.filter(req)
-            : p.filter.test(pathname);
-        if (useProxy) return this.proxyReq(p, req, res);
+      switch (requestType.name) {
+        case "LIVERELOAD SCRIPT":
+          return this.sendLiveReload(res);
+        case "FILE":
+          return this.sendResource(pathname, res);
+        case "HTML":
+          return this.sendIndex(res);
+        case "PROXY":
+          return this.proxyReq(requestType.proxy, req, res);
       }
-
-      const ext = path.extname(pathname);
-      if (ext) return this.sendResource(pathname, res);
-
-      this.sendIndex(res);
     });
 
     if (!options.server) {
       this.start();
     }
+  }
+
+  private getRequestType(
+    req: http.IncomingMessage,
+    pathname: string
+  ): RequestType {
+    if (pathname === "/livereload.js") return { name: "LIVERELOAD SCRIPT" };
+
+    const proxy = this.options.proxy.find(({ filter }) =>
+      typeof filter === "function" ? filter(req) : filter.test(pathname)
+    );
+    if (proxy) return { name: "PROXY", proxy };
+
+    if (path.extname(pathname)) return { name: "FILE" };
+
+    return { name: "HTML" };
   }
 
   static create(options: DevServer.ServerOptions) {
@@ -76,9 +111,16 @@ class DevServer {
     } catch (error) {
       throw new Error(`Index HTML file not found in "${indexPath}"`);
     }
-    const proxy = options.proxy ?? [];
-    const port = options.port ?? 3000;
     const verbose = options.verbose ?? true;
+    const port = options.port ?? 3000;
+    const proxy = options.proxy ?? [];
+
+    proxy.forEach((p) => {
+      if (!p.host)
+        throw new Error(
+          `Please provide host for proxy option with filter "${p.filter}"`
+        );
+    });
 
     return new DevServer({ ...options, indexContent, proxy, port, verbose });
   }
@@ -179,3 +221,11 @@ class DevServer {
 }
 
 export = DevServer;
+
+const green = (input: string) => `\u001b[32m${input}\u001b[0m`;
+const gray = (input: string) => `\u001b[30;1m${input}\u001b[0m`;
+const color = (requestType: RequestType) => {
+  if (requestType.name === "FILE") return gray(requestType.name);
+  if (requestType.name === "PROXY") return green(requestType.name);
+  return requestType.name;
+};

@@ -107,7 +107,7 @@ test("returns 404 when static file not found", async ({ request }) => {
 
 test("forwards requests given proxy and matched path", async ({ request }) => {
   echoServer.listen(4000);
-  await createServer({
+  createServer({
     dir: contentDir,
     proxy: [{ filter: /^\/api/, host: "localhost", port: 4000 }],
   });
@@ -117,6 +117,16 @@ test("forwards requests given proxy and matched path", async ({ request }) => {
   expect(indexReq.ok()).toBeTruthy();
   expect(await indexReq.text()).toContain("/api/123");
   await stopEchoServer();
+});
+
+test("throws given proxy without host", async ({ request }) => {
+  expect(() => {
+    createServer({
+      dir: contentDir,
+      // @ts-ignore
+      proxy: [{ filter: /^\/api/, port: 4000 }],
+    });
+  }).toThrow("Please provide host for proxy option");
 });
 
 const echoServer = http.createServer(function (req, res) {
