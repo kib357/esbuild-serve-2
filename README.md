@@ -1,22 +1,25 @@
-# spa-dev-server
+# esbuild-serve-2
 
-Front-end application development server with API proxy and live reload, suitable for ESBuild and other bundlers.
+Development server for ESBuild with API proxy and livereload.
 
-[WARNING] It's NOT a production server for static files!
+## Why?
+
+Current esbuild-serve package is outdated and isn't maintained. ESBuild internal serve API is simple, but hasn't features like livereload, API proxy and HTML5 history API fallback
+
+[WARNING] It's NOT a production server, only for development!
 
 ## Features
 
-- Static files serving from passed `dir`.
+- Static files serving from ESBuild `outdir` option or `dir` serve option.
 - Serve index.html from main dir or given `indexPath`, supports HTML5 history API fallback.
 - Proxy API requests to prevent CORS errors.
-- Live reload opened tabs with `server.livereload.sendReload()`.
-- ESBuild plugin
+- Live reload opened tabs when (re)build completed.
 - Zero dependencies and small size. Server uses `http` module directly without large production HTTP libraries, like "express".
 
 ## Installation
 
 ```
-npm i spa-dev-server
+npm i esbuild-serve-2
 ```
 
 ## Usage
@@ -25,27 +28,31 @@ npm i spa-dev-server
 
 ```typescript
 const path = require('path')
-const DevSever = require('spa-dev-server')
+const serve = require('esbuild-serve-2')
 
-DevServer.create({
-  dir: path.resolve(__dirname, './dist'),
+serve({
+    entryPoints: ["./src/index.tsx"],
+    outdir: path.resolve(__dirname, './dist'),
+  },{
   port: 3000,
-  indexPath: path.resolve(__dirname, './http/dev.html'),
+  indexPath: path.resolve(__dirname, './html/index.html'),
 });
 ```
 
 ### Custom HTTP server
 
 ```typescript
-const http = require('http')
 const path = require('path')
-const DevSever = require('spa-dev-server')
+const http = require('http')
+const serve = require('esbuild-serve-2')
 
 const server = http.createServer()
 
-DevServer.create({
-  server,
-  dir: path.resolve(__dirname, './dist')
+serve({
+    entryPoints: ["./src/index.tsx"],
+    outdir: path.resolve(__dirname, './dist'),
+  },{
+  indexPath: path.resolve(__dirname, './html/index.html'),
 });
 
 server.listen(3000)
@@ -55,10 +62,13 @@ server.listen(3000)
 
 ```typescript
 const path = require('path')
-const DevSever = require('spa-dev-server')
+const serve = require('esbuild-serve-2')
 
-DevServer.create({
-  dir: path.resolve(__dirname, './dist'),
+serve({
+    entryPoints: ["./src/index.tsx"],
+    outdir: path.resolve(__dirname, './dist'),
+  },{
+  indexPath: path.resolve(__dirname, './html/index.html'),
   proxy: [
     { filter: /^\/api/, host: "localhost", port: 4000 },
     {
@@ -68,29 +78,6 @@ DevServer.create({
     },
   ],
 });
-```
-
-### ESBuild
-
-```typescript
-import path from "path";
-import DevServer from "spa-dev-server";
-import esbuild from "esbuild";
-
-const start = async () => {
-  const dir = path.resolve(__dirname, "./dist")
-  const server = await DevServer.create({ dir });
-
-  esbuild.build({
-    bundle: true,
-    entryPoints: ["./src/index.tsx"],
-    outdir: dir,
-    plugins: [server.getEsbuildPlugin()],
-    watch: true,
-  });
-};
-
-start();
 ```
 
 ## Options

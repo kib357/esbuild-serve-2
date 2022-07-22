@@ -1,7 +1,7 @@
 {
-  "name": "spa-dev-server",
-  "version": "0.0.8",
-  "description": "Single page front-end application development server with API proxy and live reload",
+  "name": "esbuild-serve-2",
+  "version": "0.0.1",
+  "description": "Development server for ESBuild with API proxy and livereload",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kib357/spa-dev-server.git"
+    "url": "git+https://github.com/kib357/esbuild-serve-2.git"
   },
   "author": "Evgeniy Kuvshinov",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kib357/spa-dev-server/issues"
+    "url": "https://github.com/kib357/esbuild-serve-2/issues"
   },
-  "homepage": "https://github.com/kib357/spa-dev-server#readme",
+  "homepage": "https://github.com/kib357/esbuild-serve-2#readme",
   "devDependencies": {
     "@playwright/test": "^1.23.2",
     "@types/node": "^18.0.3",

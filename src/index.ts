@@ -11,7 +11,7 @@ type DevServerOptions = Omit<DevServer.ServerOptions, "dir"> & {
   dir?: string;
 };
 
-export default function (
+export = function serve(
   buildOptions: ESBuildOptions,
   serveOptions: DevServerOptions = {}
 ) {
@@ -24,4 +24,4 @@ export default function (
     plugins: [...(buildOptions.plugins ?? []), livereloadPlugin(server)],
     watch: true,
   });
-}
+};
