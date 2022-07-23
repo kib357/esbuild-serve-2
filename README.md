@@ -26,20 +26,26 @@ npm i esbuild-serve-2
 
 ### Basic
 
+By default server will start automatically at http://localhost:3000 after `serve` call. Port can be customized in second argument `ServerOptions`.
+
 ```typescript
 import path from 'path'
 import serve from 'esbuild-serve-2'
 
-serve({
+serve(
+  {
     entryPoints: ["./src/index.tsx"],
     outdir: path.resolve(__dirname, './dist'),
-  },{
-  port: 3000,
-  indexPath: path.resolve(__dirname, './html/index.html'),
-});
+  },
+  {
+    indexPath: path.resolve(__dirname, './html/index.html'),
+  }
+);
 ```
 
 ### Custom HTTP server
+
+Custom HTTP server can be passed in `ServerOptions`. With this option server will not start automatically, call to `server.listen()` required.
 
 ```typescript
 import path from 'path'
@@ -48,12 +54,16 @@ import serve from 'esbuild-serve-2'
 
 const server = http.createServer()
 
-serve({
+serve(
+  {
     entryPoints: ["./src/index.tsx"],
     outdir: path.resolve(__dirname, './dist'),
-  },{
-  indexPath: path.resolve(__dirname, './html/index.html'),
-});
+  },
+  {
+    server,
+    indexPath: path.resolve(__dirname, './html/index.html'),
+  }
+);
 
 server.listen(3000)
 ```
@@ -64,20 +74,23 @@ server.listen(3000)
 import path from 'path'
 import serve from 'esbuild-serve-2'
 
-serve({
+serve(
+  {
     entryPoints: ["./src/index.tsx"],
     outdir: path.resolve(__dirname, './dist'),
-  },{
-  indexPath: path.resolve(__dirname, './html/index.html'),
-  proxy: [
-    { filter: /^\/api/, host: "localhost", port: 4000 },
-    {
-      filter: (req) => req.headers["content-type"] === "application/json",
-      host: "localhost",
-      port: 8080,
-    },
-  ],
-});
+  },
+  {
+    indexPath: path.resolve(__dirname, './html/index.html'),
+    proxy: [
+      { filter: /^\/api/, host: "localhost", port: 4000 },
+      {
+        filter: (req) => req.headers["content-type"] === "application/json",
+        host: "localhost",
+        port: 8080,
+      },
+    ],
+  }
+);
 ```
 
 ## Options
