@@ -9,7 +9,7 @@ export default class LiveReloadServer {
 
   constructor(private server: http.Server) {
     this.server.on("upgrade", (req, socket, head) => {
-      if (req.url !== "/livereload") return socket.write("UNSUPPORTED URL\r\n");
+      if (req.url !== "/livereload") return;
 
       const key = req.headers["sec-websocket-key"];
       const digest = createHash("sha1")
