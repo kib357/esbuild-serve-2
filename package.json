@@ -1,6 +1,6 @@
 {
   "name": "esbuild-serve-2",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Development server for ESBuild with API proxy and livereload",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -13,6 +13,12 @@
     "type": "git",
     "url": "git+https://github.com/kib357/esbuild-serve-2.git"
   },
+  "keywords": [
+    "ESBuild",
+    "serve",
+    "livereload",
+    "proxy"
+  ],
   "author": "Evgeniy Kuvshinov",
   "license": "MIT",
   "bugs": {
